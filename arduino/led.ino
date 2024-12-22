@@ -3,7 +3,7 @@
 // 定义灯条相关的参数
 #define LED_PIN     6    // 定义连接到灯条数据线的 Arduino 引脚
 #define NUM_LEDS    60   // 灯条的总灯珠数量
-#define BRIGHTNESS  255  // 最大亮度（0-255）
+#define BRIGHTNESS  255  // 最大亮度(0-255)
 #define BASE_DELAY  30   // 流星基础速度（数值越小越快）
 
 // 初始化灯条对象
