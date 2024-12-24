@@ -19,6 +19,5 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 SystemState currentState = STATE_IDLE;
 FireworkEffect currentEffect;
-FireworkEffect savedEffects[MAX_SAVED_EFFECT];
 int savedCount = 0;
 int laserPressCount = 0;
