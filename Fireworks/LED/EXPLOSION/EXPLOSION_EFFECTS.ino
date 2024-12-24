@@ -15,7 +15,7 @@ struct ExplosionParams {
   CRGB color2;          // 结束颜色 (渐变的第二端)
   uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
   int stripLen;         // 条带长度 (如 30)
-  int moveRange;        // 条带移动范围 (如 80)
+  int volume;           // 移动距离 (如 50)
 };
 
 // 默认配置
@@ -24,7 +24,7 @@ ExplosionParams defaultConfig = {
   CRGB::Yellow,        // color2: 渐变结束颜色 (黄)
   20,                  // speedDelay: 每步延时
   30,                  // stripLen: 条带长度
-  230                  // moveRange: 条带移动范围
+  50                   // volume: 移动50个LED的距离
 };
 
 // ===== 颜色效果1: 条带内部渐变 =====
@@ -32,7 +32,7 @@ ExplosionParams defaultConfig = {
 // 普通移动 + 内部渐变
 void explosionGradientNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -77,7 +77,7 @@ void explosionGradientNormal(const ExplosionParams &params) {
 // 随机闪烁 + 内部渐变
 void explosionGradientRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -104,7 +104,7 @@ void explosionGradientRandom(const ExplosionParams &params) {
 // 定时闪烁 + 内部渐变
 void explosionGradientBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -159,7 +159,7 @@ void explosionGradientBlink(const ExplosionParams &params) {
 // 普通移动 + 整体渐变
 void explosionFadeNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -215,7 +215,7 @@ void explosionFadeNormal(const ExplosionParams &params) {
 // 随机闪烁 + 整体渐变
 void explosionFadeRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos，同时颜色从 color1 渐变到 color2
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -249,7 +249,7 @@ void explosionFadeRandom(const ExplosionParams &params) {
 // 定时闪烁 + 整体渐变
 void explosionFadeBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -284,7 +284,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
   // 条带长度固定后从 startPos 移动到 endPos，同时颜色从 color1 渐变到 color2
   for (int pos = startPos; pos >= endPos; pos--) {
     float colorProgress = float(startPos - pos) / float(startPos - endPos);
-    // 清空灯带
+    // ��空灯带
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
     bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
@@ -316,7 +316,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
 // 普通移动 + 颜色切换
 void explosionSwitchNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -361,7 +361,7 @@ void explosionSwitchNormal(const ExplosionParams &params) {
 // 随机闪烁 + 颜色切换
 void explosionSwitchRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -389,7 +389,7 @@ void explosionSwitchRandom(const ExplosionParams &params) {
 // 定时闪烁 + 颜色切换
 void explosionSwitchBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
