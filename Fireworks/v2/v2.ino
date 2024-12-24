@@ -165,7 +165,7 @@ void loop() {
       // 保存当前设置
       saveCurrentEffect();
       // 然后回到 CUSTOMIZE 继续定制或退出
-      enterCustomizeMode();
+      enterIdleMode();
       break;
 
     case STATE_PLAY_SAVED:
