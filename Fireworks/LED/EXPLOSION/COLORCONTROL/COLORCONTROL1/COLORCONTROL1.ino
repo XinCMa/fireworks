@@ -22,7 +22,7 @@ ExplosionParams explosionCfg = {
   CRGB::Yellow,        // color2: 渐变结束颜色 (黄)
   20,                  // speedDelay: 每步延时
   30,                  // stripLen: 条带长度
-  80                   // moveRange: 条带移动范围
+  230                  // moveRange: 条带移动范围 (改为230)
 };
 
 // 函数声明
@@ -60,8 +60,8 @@ void loop() {
  */
 void explosionEffect(const ExplosionParams &params) {
   // 限制条带移动范围
-  int startPos = 0;
-  int endPos = params.moveRange - params.stripLen;
+  int startPos = TOTAL_LED_COUNT - 1;  // 从最大索引开始
+  int endPos = params.moveRange;  // 移动到这个位置停止
 
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -71,7 +71,7 @@ void explosionEffect(const ExplosionParams &params) {
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
-  for (int pos = startPos; pos <= endPos; pos++) {
+  for (int pos = startPos; pos >= endPos; pos--) {  // 改为递减
     drawGrowingGradientBar(pos, params, params.stripLen);
     FastLED.show();
     delay(params.speedDelay);
@@ -86,13 +86,13 @@ void drawGrowingGradientBar(int pos, const ExplosionParams &params, int growLen)
   // 清空灯带
   fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
-  // 在 [pos, pos+growLen-1] 范围内绘制渐变条带
+  // 在 [pos-growLen+1, pos] 范围内绘制渐变条带
   for (int i = 0; i < growLen; i++) {
-    int ledIndex = pos + i;
+    int ledIndex = pos - i;  // 改为递减
     if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
 
     // 计算渐变颜色：从 color1 → color2
-    float ratio = float(i) / float(params.stripLen - 1); // 按总长度计算渐变比例
+    float ratio = float(i) / float(params.stripLen - 1);
     CRGB gradColor = blend(params.color1, params.color2, uint8_t(ratio * 255));
 
     leds[ledIndex] = gradColor;

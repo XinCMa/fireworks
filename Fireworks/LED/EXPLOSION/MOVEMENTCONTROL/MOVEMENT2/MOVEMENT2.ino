@@ -18,7 +18,7 @@ struct ExplosionParams {
 ExplosionParams explosionCfg = {
   20,                  // speedDelay: 每步延时
   30,                  // stripLen: 条带长度
-  80                   // moveRange: 条带移动范围
+  230                  // moveRange: 条带移动范围 (改为230)
 };
 
 // 函数声明
@@ -58,11 +58,11 @@ void loop() {
  */
 void explosionEffect(const ExplosionParams &params) {
   // 限制条带移动范围
-  int startPos = 0;
-  int endPos = params.moveRange - params.stripLen;
+  int startPos = TOTAL_LED_COUNT - 1;
+  int endPos = params.moveRange;
 
   // 条带长度固定后从 startPos 移动到 endPos
-  for (int pos = startPos; pos <= endPos; pos++) {
+  for (int pos = startPos; pos >= endPos; pos--) {
     drawFlickeringWhiteBar(pos, params);
     FastLED.show();
     delay(params.speedDelay);
@@ -74,19 +74,16 @@ void explosionEffect(const ExplosionParams &params) {
  *        条带为纯白色，随机闪烁，长度为 stripLen
  */
 void drawFlickeringWhiteBar(int pos, const ExplosionParams &params) {
-  // 清空灯带
   fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
-  // 在 [pos, pos+stripLen-1] 范围内绘制随机白色闪烁条带
   for (int i = 0; i < params.stripLen; i++) {
-    int ledIndex = pos + i;
+    int ledIndex = pos - i;
     if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
 
-    // 50% 概率点亮为白色
     if (random(0, 100) < 50) {
       leds[ledIndex] = CRGB::White;
     } else {
-      leds[ledIndex] = CRGB::Black; // 不点亮（黑色）
+      leds[ledIndex] = CRGB::Black;
     }
   }
 }

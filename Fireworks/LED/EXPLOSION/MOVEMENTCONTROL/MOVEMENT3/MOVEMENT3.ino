@@ -19,7 +19,7 @@ struct ExplosionParams {
 ExplosionParams explosionCfg = {
   20,                  // speedDelay: 每步延时
   30,                  // stripLen: 条带长度
-  80                   // moveRange: 条带移动范围
+  230                  // moveRange: 条带移动范围 (改为230)
 };
 
 // 函数声明
@@ -57,8 +57,8 @@ void loop() {
  */
 void explosionEffect(const ExplosionParams &params) {
   // 限制条带移动范围
-  int startPos = 0;
-  int endPos = params.moveRange - params.stripLen;
+  int startPos = TOTAL_LED_COUNT - 1;
+  int endPos = params.moveRange;
 
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -68,7 +68,7 @@ void explosionEffect(const ExplosionParams &params) {
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
-  for (int pos = startPos; pos <= endPos; pos++) {
+  for (int pos = startPos; pos >= endPos; pos--) {
     drawWhiteBar(pos, params, params.stripLen);
     FastLED.show();
     delay(params.speedDelay);
@@ -81,20 +81,15 @@ void explosionEffect(const ExplosionParams &params) {
  *        包含闪烁效果
  */
 void drawWhiteBar(int pos, const ExplosionParams &params, int growLen) {
-  // 清空灯带
   fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   
-  // 使用 millis() 来控制闪烁
   bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
   
-  // 只在应该点亮的时候绘制白色条带
   if (shouldLight) {
-    // 在 [pos, pos+growLen-1] 范围内绘制白色条带
     for (int i = 0; i < growLen; i++) {
-      int ledIndex = pos + i;
+      int ledIndex = pos - i;
       if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
       
-      // 固定为白色
       leds[ledIndex] = CRGB::White;
     }
   }
