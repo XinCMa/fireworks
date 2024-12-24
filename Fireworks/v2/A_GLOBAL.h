@@ -25,8 +25,7 @@
 #define JOYSTICK1_X_PIN A0
 #define JOYSTICK1_Y_PIN A1
 #define JOYSTICK2_X_PIN A2
-#define JOYSTICK2_Y_PIN A3
-
+#define JOYSTICK2_Y_PIN A3 
 #define MSG_SAVE_EFFECT    'S'
 #define MSG_PLAY_EFFECT    'P'
 #define MSG_PREVIEW        'V'
@@ -80,15 +79,12 @@ extern LiquidCrystal_I2C lcd;
 
 extern SystemState currentState;
 extern FireworkEffect currentEffect;
-extern FireworkEffect savedEffects[MAX_SAVED_EFFECT];
-extern int savedCount;
 extern int laserPressCount;
 
-
-bool lastAscendButtonState = HIGH;
-bool lastLaserButtonState = HIGH;
-bool lastPreviewButtonState = HIGH;
-bool lastSaveButtonState = HIGH;
-bool lastCustomizeButtonState = HIGH;
+extern bool lastAscendButtonState;
+extern bool lastLaserButtonState;
+extern bool lastPreviewButtonState;
+extern bool lastSaveButtonState;
+extern bool lastCustomizeButtonState;
 
 #endif
