@@ -4,6 +4,7 @@
 #include <FastLED.h>
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
 
 // 常量与引脚定义
 #define LED_PIN          7
@@ -21,6 +22,8 @@
 #define MIRROR_SLIDER_PIN     A13
 #define SIZE_SLIDER_PIN       A14
 #define SPEED_SLIDER_PIN      A15
+
+
 
 #define JOYSTICK1_X_PIN A0
 #define JOYSTICK1_Y_PIN A1
@@ -76,6 +79,10 @@ struct FireworkEffect {
 extern CRGB leds[TOTAL_LED_COUNT];
 extern Servo laserServo;
 extern LiquidCrystal_I2C lcd;
+extern Keypad keypad;
+
+extern const int minEffect;
+extern const int maxEffect;
 
 extern SystemState currentState;
 extern FireworkEffect currentEffect;
@@ -86,5 +93,6 @@ extern bool lastLaserButtonState;
 extern bool lastPreviewButtonState;
 extern bool lastSaveButtonState;
 extern bool lastCustomizeButtonState;
+
 
 #endif
