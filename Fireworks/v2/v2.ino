@@ -47,10 +47,10 @@ void setup() {
   laserServo.write(0);
 
   // 初始化各按钮
-  pinMode(BIG_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(CUSTOMIZE_BUTTON_PIN, INPUT_PULLUP);
   pinMode(PREVIEW_BUTTON_PIN, INPUT_PULLUP);
   pinMode(SAVE_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(UP_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(ASCEND_BUTTON_PIN, INPUT_PULLUP);
   pinMode(LASER_BUTTON_PIN, INPUT_PULLUP);
 
   // 初始化 LCD
@@ -73,8 +73,7 @@ void loop() {
   
   switch (currentState) {
     case STATE_IDLE:
-      // 检查有没有按下“大开关”来进入定制模式
-      if (digitalRead(BIG_BUTTON_PIN) == LOW) {
+      if (digitalRead(CUSTOMIZE_BUTTON_PIN) == LOW) {
         enterCustomizeMode();
       }
 
@@ -103,19 +102,19 @@ void loop() {
       FastLED.show();
 
       // 读取当前按钮状态
-      bool currentUpState = digitalRead(UP_BUTTON_PIN);
+      bool currentUpState = digitalRead(ASCEND_BUTTON_PIN);
       bool currentLaserState = digitalRead(LASER_BUTTON_PIN);
       bool currentPreviewState = digitalRead(PREVIEW_BUTTON_PIN);
       bool currentSaveState = digitalRead(SAVE_BUTTON_PIN);
       
       // 检测上升模式按钮状态变化
-      if (currentUpState != lastUpButtonState) {
+      if (currentUpState != lastAscendButtonState) {
         cycleLaunchMode();
         lcd.clear();
         lcd.print("Mode: ");
         lcd.print(modeNames[currentEffect.launchMode]);
       }
-      lastUpButtonState = currentUpState;
+      lastAscendButtonState = currentUpState;
 
       // 检测激光按钮状态变化
       if (currentLaserState != lastLaserButtonState) {

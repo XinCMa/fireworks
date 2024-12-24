@@ -7,14 +7,13 @@
 
 // 常量与引脚定义
 #define LED_PIN          7
-#define TOTAL_LED_COUNT  150
+#define TOTAL_LED_COUNT  280
 #define PREVIEW_LED_COUNT 20
-#define MAX_SAVED_EFFECT 10
 
 #define SERVO_PIN       9
-#define UP_BUTTON_PIN   2
+#define ASCEND_BUTTON_PIN   2
 #define LASER_BUTTON_PIN 3
-#define BIG_BUTTON_PIN  10
+#define CUSTOMIZE_BUTTON_PIN  10
 #define PREVIEW_BUTTON_PIN 5
 #define SAVE_BUTTON_PIN 8
 
@@ -85,10 +84,11 @@ extern FireworkEffect savedEffects[MAX_SAVED_EFFECT];
 extern int savedCount;
 extern int laserPressCount;
 
-extern bool lastUpButtonState;
-extern bool lastLaserButtonState;
-extern bool lastPreviewButtonState;
-extern bool lastSaveButtonState;
-extern bool lastBigButtonState;
+
+bool lastAscendButtonState = HIGH;
+bool lastLaserButtonState = HIGH;
+bool lastPreviewButtonState = HIGH;
+bool lastSaveButtonState = HIGH;
+bool lastCustomizeButtonState = HIGH;
 
 #endif
