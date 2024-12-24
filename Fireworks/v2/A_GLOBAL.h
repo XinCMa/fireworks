@@ -94,5 +94,12 @@ extern bool lastPreviewButtonState;
 extern bool lastSaveButtonState;
 extern bool lastCustomizeButtonState;
 
+struct ExplosionParams {
+  CRGB color1;          // 起始颜色 (渐变的第一端)
+  CRGB color2;          // 结束颜色 (渐变的第二端)
+  uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
+  int stripLen;         // 条带长度 (如 30)
+  int moveRange;        // 条带移动范围 (如 80)
+};
 
 #endif
