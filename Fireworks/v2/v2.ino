@@ -321,7 +321,7 @@ void explodeFirework(const FireworkEffect &effect) {
   // 根据 GradientMode 选择颜色渐变类型
   if (effect.gradientMode == GRAIDENT) {
     if (effect.explodeMode == NORMAL) {
-      explosionGradientNormal(params);
+      explosionFadeNormal(params);
     } else if (effect.explodeMode == RANDOM) {
       explosionGradientRandom(params);
     } else if (effect.explodeMode == BLINK) {
@@ -424,11 +424,37 @@ void cycleLaserColor() {
  **************************************************/
 // 从摇杆获取颜色
 CRGB getColorFromJoystick(int joyPinX, int joyPinY) {
-  // 可以移植您最后贴出的“多按钮混色”代码，或真正用(joyPinX, joyPinY)计算HUE/SAT
-  // 这里演示：先返回一个随机颜色
-  // 实际请替换成您自己的摇杆取色逻辑
-  CRGB result = CHSV(random8(), 255, 255);
-  return result;
+  // 读取 Joystick 的 X 和 Y 值
+  int xValue = analogRead(joyPinX) - 512; // 偏移中心值到 -512 ~ 512
+  int yValue = analogRead(joyPinY) - 512; // 偏移中心值到 -512 ~ 512
+  uint8_t lastHue = 0;           // 记录最后的颜色 Hue 值
+  bool inDeadzone = true;        // Joystick 是否在死区
+
+  // 检查是否在死区内
+  bool currentlyInDeadzone = (abs(xValue) < JOY_DEADZONE && abs(yValue) < JOY_DEADZONE);
+
+  if (!currentlyInDeadzone) {
+    // Joystick 离开中心
+    inDeadzone = false; // 标记为不在死区
+
+    // 计算倾斜角度
+    float angle = atan2(-yValue, xValue) * 180.0 / PI;
+    if (angle < 0) {
+      angle += 360; // 将角度范围调整到 0 ~ 360
+    }
+
+    // 将角度映射到 HSV 色环
+    lastHue = (uint8_t)(angle / 360.0 * 255); // 更新最后的颜色
+  }
+
+  // 如果在死区，维持最后的颜色
+  if (currentlyInDeadzone && !inDeadzone) {
+    Serial.println("Joystick Released. Keeping last color.");
+    inDeadzone = true; // 标记为在死区
+  }
+
+  // 返回基于当前 Hue 的颜色
+  return CHSV(lastHue, 255, currentEffect.maxBrightness);
 }
 
 // 滑杆读取最大亮度

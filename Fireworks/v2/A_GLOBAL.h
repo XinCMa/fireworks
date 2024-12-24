@@ -1,7 +1,7 @@
 #ifndef A_GLOBAL_H
 #define A_GLOBAL_H
 
-#include <FastLED.h>
+#include <FastLED.h>  
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
@@ -25,12 +25,12 @@
 #define SIZE_SLIDER_PIN       A14
 #define SPEED_SLIDER_PIN      A15
 
-
-
 #define JOYSTICK1_X_PIN A0
 #define JOYSTICK1_Y_PIN A1
 #define JOYSTICK2_X_PIN A2
 #define JOYSTICK2_Y_PIN A3 
+#define JOY_DEADZONE 120 
+
 #define MSG_SAVE_EFFECT    'S'
 #define MSG_PLAY_EFFECT    'P'
 #define MSG_PREVIEW        'V'
@@ -85,6 +85,14 @@ struct FireworkEffect {
   int speedDelay;
 };
 
+struct ExplosionParams {
+  CRGB color1;          // 起始颜色 (渐变的第一端)
+  CRGB color2;          // 结束颜色 (渐变的第二端)
+  uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
+  int stripLen;         // 条带长度 (如 30)
+  int moveRange;        // 条带移动范围 (如 80)
+};
+
 // 全局变量声明
 extern CRGB leds[TOTAL_LED_COUNT];
 extern Servo laserServo;
@@ -96,6 +104,7 @@ extern const int maxEffect;
 
 extern SystemState currentState;
 extern FireworkEffect currentEffect;
+extern ExplosionParams currentExplosionParams;
 extern int laserPressCount;
 
 extern bool defaultAscendButtonState;
@@ -107,12 +116,6 @@ extern bool defaultExplodeButtonState;
 extern bool defaultGradientButtonState;
 
 
-struct ExplosionParams {
-  CRGB color1;          // 起始颜色 (渐变的第一端)
-  CRGB color2;          // 结束颜色 (渐变的第二端)
-  uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
-  int stripLen;         // 条带长度 (如 30)
-  int moveRange;        // 条带移动范围 (如 80)
-};
+
 
 #endif
