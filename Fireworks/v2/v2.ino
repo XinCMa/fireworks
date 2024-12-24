@@ -116,8 +116,8 @@ void loop() {
         lcd.print(modeNames[currentEffect.launchMode]);
         Serial.print("Mode: ");
         Serial.println(modeNames[currentEffect.launchMode]);
+        delay(500);
       }
-      // lastAscendButtonState = currentUpState;
 
       // 检测激光按钮状态变化
       if (currentLaserState != lastLaserButtonState) {
@@ -133,23 +133,20 @@ void loop() {
           lcd.print("Laser: None");
           Serial.println("Laser: None");
         }
+        delay(500);
       }
-      // lastLaserButtonState = currentLaserState;
 
       // 检测预览按钮状态变化
       if (currentPreviewState != lastPreviewButtonState) {
-        Serial.println("Entering Preview");
+        Serial.println("Entering Preview State");
         enterPreviewMode();
       }
-      // lastPreviewButtonState = currentPreviewState;
 
       // 检测保存按钮状态变化
       if (currentSaveState != lastSaveButtonState) {  // 修改这里，使用正确的变量名
         currentState = STATE_SAVE;
         Serial.println("Entering Save State");
-
       }
-      // lastSaveButtonState = currentSaveState;  // 修改这里，使用正确的变量名
 
       // 读取滑杆 - 这些不需要状态检测，直接读取当前值
       currentEffect.maxBrightness = getBrightnessFromSlider();
@@ -320,10 +317,26 @@ void explodeFirework(const FireworkEffect &effect) {
 /************************************************** 
  *          监听 numpad 点播功能(示例占位)
  **************************************************/
+
 void checkNumpadInput() {
-  // 如果检测到用户输入了某个数字n
-  // 并且 n 在已保存效果的范围内，就播放
-  // 这里只是示例占位
+  char key = keypad.getKey(); // 获取按键输入
+  if (key) { // 如果检测到按键
+    Serial.print("Key pressed: ");
+    Serial.println(key);
+
+    // 检查是否是有效的数字键
+    if (key >= '0' && key <= '9') {
+      int keyEffect = key - '0'; // 将字符转为整数
+      if (keyEffect >= minEffect && keyEffect <= maxEffect) {
+        Serial.print("Playing effect: ");
+        Serial.println(keyEffect);
+      } else {
+        Serial.println("Invalid effect number.");
+      }
+    } else {
+      Serial.println("Non-numeric key pressed.");
+    }
+  }
 }
 
 /************************************************** 
