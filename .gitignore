@@ -1,3 +1,5 @@
 
 *.rhl
 *.3dmbak
+/model_to_print
+/model_to_print
