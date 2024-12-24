@@ -7,11 +7,13 @@ const char* modeNames[] = {
 };
 
 
-bool lastAscendButtonState = HIGH;
-bool lastLaserButtonState = HIGH;
-bool lastPreviewButtonState = HIGH;
-bool lastSaveButtonState = LOW;
-bool lastCustomizeButtonState = LOW;
+bool defaultAscendButtonState = HIGH;
+bool defaultLaserButtonState = HIGH;
+bool defaultPreviewButtonState = HIGH;
+bool defaultSaveButtonState = LOW;
+bool defaultCustomizeButtonState = LOW;
+bool defaultExplodeButtonState = HIGH;
+bool defaultGradientButtonState = HIGH;
 
 char keys[4][3] = {
   {'1', '2', '3'},

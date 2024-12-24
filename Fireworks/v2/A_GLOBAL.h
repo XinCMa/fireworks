@@ -17,6 +17,8 @@
 #define CUSTOMIZE_BUTTON_PIN  10
 #define PREVIEW_BUTTON_PIN 5
 #define SAVE_BUTTON_PIN 8
+#define GRADIENT_BUTTON_PIN 11
+#define EXPLIDE_BUTTON_PIN 12
 
 #define BRIGHTNESS_SLIDER_PIN A12
 #define MIRROR_SLIDER_PIN     A13
@@ -96,11 +98,14 @@ extern SystemState currentState;
 extern FireworkEffect currentEffect;
 extern int laserPressCount;
 
-extern bool lastAscendButtonState;
-extern bool lastLaserButtonState;
-extern bool lastPreviewButtonState;
-extern bool lastSaveButtonState;
-extern bool lastCustomizeButtonState;
+extern bool defaultAscendButtonState;
+extern bool defaultLaserButtonState;
+extern bool defaultPreviewButtonState;
+extern bool defaultSaveButtonState;
+extern bool defaultCustomizeButtonState;
+extern bool defaultExplodeButtonState;
+extern bool defaultGradientButtonState;
+
 
 struct ExplosionParams {
   CRGB color1;          // 起始颜色 (渐变的第一端)

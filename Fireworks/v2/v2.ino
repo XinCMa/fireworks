@@ -10,6 +10,8 @@ void saveCurrentEffect();
 void playEffect(const FireworkEffect &effect);
 void cycleLaunchMode();
 void cycleLaserColor();
+void cycleGradientMode();
+void cycleExpldeMode();
 
 // 读取交互输入的占位函数
 CRGB getColorFromJoystick(int joyPinX, int joyPinY); // 用您自己的方式实现
@@ -109,7 +111,7 @@ void loop() {
       bool currentSaveState = digitalRead(SAVE_BUTTON_PIN);
       
       // 检测上升模式按钮状态变化
-      if (currentUpState != lastAscendButtonState) {
+      if (currentUpState != defaultAscendButtonState) {
         cycleLaunchMode();
         lcd.clear();
         lcd.print("Mode: ");
@@ -120,7 +122,7 @@ void loop() {
       }
 
       // 检测激光按钮状态变化
-      if (currentLaserState != lastLaserButtonState) {
+      if (currentLaserState != defaultLaserButtonState) {
         cycleLaserColor();
         lcd.clear();
         if (currentEffect.laserColor == LASER_GREEN) {
@@ -137,13 +139,13 @@ void loop() {
       }
 
       // 检测预览按钮状态变化
-      if (currentPreviewState != lastPreviewButtonState) {
+      if (currentPreviewState != defaultPreviewButtonState) {
         Serial.println("Entering Preview State");
         enterPreviewMode();
       }
 
       // 检测保存按钮状态变化
-      if (currentSaveState != lastSaveButtonState) {  // 修改这里，使用正确的变量名
+      if (currentSaveState != defaultSaveButtonState) {  // 修改这里，使用正确的变量名
         currentState = STATE_SAVE;
         Serial.println("Entering Save State");
       }
@@ -230,11 +232,13 @@ void saveCurrentEffect() {
              + String(currentEffect.color2.b) + ","
              + String(currentEffect.maxBrightness) + ","
              + String(currentEffect.launchMode) + ","
+             + String(currentEffect.explodeMode) + ","
+             + String(currentEffect.gradientMode) + ","
+             + String(currentEffect.launchMode) + ","
              + String(currentEffect.laserColor) + ","
              + String(currentEffect.mirrorAngle) + ","
              + String(currentEffect.explosionLEDCount) + ","
              + String(currentEffect.speedDelay);
-             
   Serial.println(msg);
 }
 
@@ -371,7 +375,7 @@ void checkNumpadInput() {
 }
 
 /************************************************** 
- *        上升模式/激光颜色 切换函数
+ *              切换函数
  **************************************************/
 void cycleLaunchMode() {
   if (currentEffect.launchMode == NORMAL_ASCEND) {
@@ -380,6 +384,26 @@ void cycleLaunchMode() {
     currentEffect.launchMode = PENDULUM_ASCEND;
   } else {
     currentEffect.launchMode = NORMAL_ASCEND;
+  }
+}
+
+void cycleGradientMode() {
+  if (currentEffect.gradientMode == GRAIDENT) {
+    currentEffect.gradientMode = FADE;
+  } else if (currentEffect.gradientMode == FADE) {
+    currentEffect.gradientMode = SWITCH;
+  } else {
+    currentEffect.gradientMode = SWITCH;
+  }
+}
+
+void cycleExplodeMode() {
+  if (currentEffect.explodeMode == NORMAL) {
+    currentEffect.explodeMode = BLINK;
+  } else if (currentEffect.explodeMode == BLINK) {
+    currentEffect.explodeMode = RANDOM;
+  } else {
+    currentEffect.explodeMode = RANDOM;
   }
 }
 
