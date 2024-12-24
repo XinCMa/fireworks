@@ -2,11 +2,11 @@
 
 // ========== 根据你的实际情况修改 ========== //
 #define LED_PIN     6           // 输出到灯带的数据引脚
-#define NUM_LEDS    200         // 你的灯带总数
+#define TOTAL_LED_COUNT    280     // 你的灯带总数
 // =========================================== //
 
 // 创建 LED 数组
-CRGB leds[NUM_LEDS];
+CRGB leds[TOTAL_LED_COUNT];
 
 // 相关参数结构
 struct BarsWithGapParams {
@@ -33,11 +33,11 @@ void setup() {
   Serial.println("==== 5 Short Bars with 5-Leds Gap Ascend Demo ====");
 
   // 初始化 LED
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
   // 全局亮度 (0~255)
   FastLED.setBrightness(255);
 
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
 }
 
@@ -46,7 +46,7 @@ void loop() {
   multipleShortBarsWithGapsAscend(barsCfg);
 
   // 播放完成后清空灯带，等待1秒
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
   delay(1000);
 }
@@ -64,12 +64,12 @@ void multipleShortBarsWithGapsAscend(const BarsWithGapParams &cfg) {
   // 对 5个条带 + 4处间隔 = 5*10 + 4*5 = 70
 
   // 2) 计算移动的最顶位置
-  int topLimit = NUM_LEDS - totalSegLen; // 若=200, 则topLimit=130
+  int topLimit = TOTAL_LED_COUNT - totalSegLen; // 若=200, 则topLimit=130
 
   // 3) 从 pos=0 移动到 pos=topLimit
   for (int pos = 0; pos <= topLimit; pos++) {
     // 清空灯带
-    fill_solid(leds, NUM_LEDS, CRGB::Black);
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
     // 4) 绘制 5 个短条带 (每个段内部做尾暗头亮)
     for (int segIndex = 0; segIndex < cfg.segCount; segIndex++) {
@@ -83,7 +83,7 @@ void multipleShortBarsWithGapsAscend(const BarsWithGapParams &cfg) {
       // 条带内部渐变：i=0 → 尾部(亮度最低), i=segLen-1 → 头部(亮度最高)
       for (int i = 0; i < cfg.segLen; i++) {
         int ledIndex = barStart + i;
-        if (ledIndex < 0 || ledIndex >= NUM_LEDS) continue;
+        if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
 
         // 线性渐变: ratio= i/(segLen-1)
         float ratio = float(i) / float(cfg.segLen - 1);

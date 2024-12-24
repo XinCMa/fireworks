@@ -2,9 +2,9 @@
 
 // 根据你的实际情况修改
 #define LED_PIN     6       // 灯带数据输出引脚
-#define NUM_LEDS    280     // 你的灯带总颗数
+#define TOTAL_LED_COUNT    280     // 你的灯带总颗数
 
-CRGB leds[NUM_LEDS];
+CRGB leds[TOTAL_LED_COUNT];
 
 // 用来控制“普通上升”且“头在大索引侧、尾在小索引侧”的核心参数
 struct AscendParams {
@@ -25,12 +25,12 @@ void setup() {
   Serial.println("==== Normal Ascend: Head on Larger Index ====");
 
   // 初始化 FastLED
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
   // 全局亮度可先设为 255
   FastLED.setBrightness(255);
 
   // 清空灯带
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
 }
 
@@ -39,7 +39,7 @@ void loop() {
   normalAscendEffect(normalAscendCfg);
 
   // 动画完成后，清空并等待1秒，再循环一遍
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
   delay(1000);
 }
@@ -50,18 +50,18 @@ void loop() {
  *        整个条带移动时，“头”在大索引那一端，“尾”在小索引那一端。
  */
 void normalAscendEffect(const AscendParams &params) {
-  int topLimit = NUM_LEDS - params.stripLen; 
+  int topLimit = TOTAL_LED_COUNT - params.stripLen; 
   // pos 递增表示从小编号往大编号移动
 
   for (int pos = 0; pos <= topLimit; pos++) {
     // 清空灯带
-    fill_solid(leds, NUM_LEDS, CRGB::Black);
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
     // 在 [pos, pos+stripLen-1] 这段绘制"尾暗头亮"
     for (int i = 0; i < params.stripLen; i++) {
       int ledIndex = pos + i;
       // 边界检查
-      if (ledIndex < 0 || ledIndex >= NUM_LEDS) continue;
+      if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
 
       // 线性渐变: i=0 → ratio=0 → 最暗, i=stripLen-1 → ratio=1 → 最亮
       float ratio = float(i) / float(params.stripLen - 1);

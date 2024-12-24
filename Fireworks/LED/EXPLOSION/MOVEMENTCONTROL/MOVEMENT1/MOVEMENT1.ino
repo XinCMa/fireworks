@@ -2,12 +2,11 @@
 
 // ========== 根据你的实际情况修改 ========== //
 #define LED_PIN     6           // 输出到灯带的数据引脚
-#define NUM_LEDS    280         // 你的灯带总数
-#define BLINK_INTERVAL 50       // 闪烁间隔（毫秒）
+#define TOTAL_LED_COUNT    280     // 你的灯带总数
 // =========================================== //
 
 // 创建 LED 数组
-CRGB leds[NUM_LEDS];
+CRGB leds[TOTAL_LED_COUNT];
 
 // 爆炸效果参数
 struct ExplosionParams {
@@ -31,11 +30,11 @@ void setup() {
   Serial.println("==== Explosion Effect: White Bar ====");
 
   // 初始化 FastLED
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
   FastLED.setBrightness(255); // 设置全局亮度上限
 
   // 清空灯带
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
 }
 
@@ -44,7 +43,7 @@ void loop() {
   explosionEffect(explosionCfg);
 
   // 动画结束后清空
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
   delay(1000); // 暂停1秒后再重复
 }
@@ -76,26 +75,19 @@ void explosionEffect(const ExplosionParams &params) {
 }
 
 /**
- * @brief 绘制一个闪烁的白色条带
+ * @brief 绘制一个逐渐变长的白色条带
  *        条带为纯白色，长度为 growLen (逐渐延长)
- *        包含闪烁效果
  */
 void drawWhiteBar(int pos, const ExplosionParams &params, int growLen) {
   // 清空灯带
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
-  
-  // 使用 millis() 来控制闪烁
-  bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
-  
-  // 只在应该点亮的时候绘制白色条带
-  if (shouldLight) {
-    // 在 [pos, pos+growLen-1] 范围内绘制白色条带
-    for (int i = 0; i < growLen; i++) {
-      int ledIndex = pos + i;
-      if (ledIndex < 0 || ledIndex >= NUM_LEDS) continue;
-      
-      // 固定为白色
-      leds[ledIndex] = CRGB::White;
-    }
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+
+  // 在 [pos, pos+growLen-1] 范围内绘制白色条带
+  for (int i = 0; i < growLen; i++) {
+    int ledIndex = pos + i;
+    if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
+
+    // 固定为白色
+    leds[ledIndex] = CRGB::White;
   }
 }

@@ -2,11 +2,11 @@
 
 // ========== 根据你的实际情况修改 ========== //
 #define LED_PIN     6           // 输出到灯带的数据引脚
-#define NUM_LEDS    280         // 你的灯带总数
+#define TOTAL_LED_COUNT    280     // 你的灯带总数
 // =========================================== //
 
 // 创建 LED 数组
-CRGB leds[NUM_LEDS];
+CRGB leds[TOTAL_LED_COUNT];
 
 // 爆炸效果参数
 struct ExplosionParams {
@@ -30,11 +30,11 @@ void setup() {
   Serial.println("==== Explosion Effect: Flickering White Bar ====");
 
   // 初始化 FastLED
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
   FastLED.setBrightness(255); // 设置全局亮度上限
 
   // 清空灯带
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
 
   // 初始化随机种子
@@ -46,7 +46,7 @@ void loop() {
   explosionEffect(explosionCfg);
 
   // 动画结束后清空
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
   FastLED.show();
   delay(1000); // 暂停1秒后再重复
 }
@@ -75,12 +75,12 @@ void explosionEffect(const ExplosionParams &params) {
  */
 void drawFlickeringWhiteBar(int pos, const ExplosionParams &params) {
   // 清空灯带
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
   // 在 [pos, pos+stripLen-1] 范围内绘制随机白色闪烁条带
   for (int i = 0; i < params.stripLen; i++) {
     int ledIndex = pos + i;
-    if (ledIndex < 0 || ledIndex >= NUM_LEDS) continue;
+    if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
 
     // 50% 概率点亮为白色
     if (random(0, 100) < 50) {
