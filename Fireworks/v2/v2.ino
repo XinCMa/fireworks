@@ -304,13 +304,44 @@ void launchFirework(const FireworkEffect &effect) {
  *    爆炸
  **************************************************/
 void explodeFirework(const FireworkEffect &effect) {
-  // 爆炸 LED 数量 effect.explosionLEDCount
-  // 爆炸速度 effect.speedDelay
-  // 这里也需要配合渐变色或闪烁方式(后续再补)
   Serial.println("Explode Firework!");
-  // 示例：点亮指定数量的 LED
-  // ...
+
+  ExplosionParams params = {
+    effect.color1,
+    effect.color2,
+    effect.speedDelay,
+    effect.explosionLEDCount,
+    effect.mirrorAngle
+  };
+
+  // 根据 GradientMode 选择颜色渐变类型
+  if (effect.gradientMode == GRAIDENT) {
+    if (effect.explodeMode == NORMAL) {
+      explosionGradientNormal(params);
+    } else if (effect.explodeMode == RANDOM) {
+      explosionGradientRandom(params);
+    } else if (effect.explodeMode == BLINK) {
+      explosionGradientBlink(params);
+    }
+  } else if (effect.gradientMode == FADE) {
+    if (effect.explodeMode == NORMAL) {
+      explosionFadeNormal(params);
+    } else if (effect.explodeMode == RANDOM) {
+      explosionFadeRandom(params);
+    } else if (effect.explodeMode == BLINK) {
+      explosionFadeBlink(params);
+    }
+  } else if (effect.gradientMode == SWITCH) {
+    if (effect.explodeMode == NORMAL) {
+      explosionSwitchNormal(params);
+    } else if (effect.explodeMode == RANDOM) {
+      explosionSwitchRandom(params);
+    } else if (effect.explodeMode == BLINK) {
+      explosionSwitchBlink(params);
+    }
+  }
 }
+
 
 
 

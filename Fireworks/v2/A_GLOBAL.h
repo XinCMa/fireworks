@@ -54,8 +54,14 @@ enum LaunchMode {
 
 enum ExplodeMode {
   NORMAL,
-  SHATTER,
-  STAR
+  BLINK,
+  RANDOM
+};
+
+enum GradientMode{
+  GRAIDENT,
+  FADE,
+  SWITCH
 };
 
 enum LaserColor {
@@ -69,6 +75,8 @@ struct FireworkEffect {
   CRGB color2;
   uint8_t maxBrightness;
   LaunchMode launchMode;
+  GradientMode gradientMode;
+  ExplodeMode explodeMode;
   LaserColor laserColor;
   int mirrorAngle;
   int explosionLEDCount;
