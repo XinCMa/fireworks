@@ -16,6 +16,7 @@ struct ExplosionParams {
   uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
   int stripLen;         // 条带长度 (如 30)
   int volume;           // 移动距离 (如 50)
+  uint8_t maxBrightness; // 最大亮度 (0-255)
 };
 
 // 默认配置
@@ -24,8 +25,9 @@ ExplosionParams defaultConfig = {
   CRGB::Yellow,        // color2: 渐变结束颜色 (黄)
   20,                  // speedDelay: 每步延时
   30,                  // stripLen: 条带长度
-  50                   // volume: 移动50个LED的距离
-};
+  50,                  // volume: 移动50个LED的距离
+  255                  // maxBrightness: 最大亮度
+}; 
 
 // ===== 颜色效果1: 条带内部渐变 =====
 
