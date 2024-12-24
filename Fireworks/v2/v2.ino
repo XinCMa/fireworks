@@ -58,6 +58,7 @@ void setup() {
   lcd.backlight();
   lcd.clear();
   lcd.print("System Idle");
+  Serial.println("System Idle");
 
   // 进入空闲模式
   enterIdleMode();
@@ -73,7 +74,7 @@ void loop() {
   
   switch (currentState) {
     case STATE_IDLE:
-      if (digitalRead(CUSTOMIZE_BUTTON_PIN) == LOW) {
+      if (digitalRead(CUSTOMIZE_BUTTON_PIN) == HIGH) {
         enterCustomizeMode();
       }
 
@@ -113,8 +114,10 @@ void loop() {
         lcd.clear();
         lcd.print("Mode: ");
         lcd.print(modeNames[currentEffect.launchMode]);
+        Serial.print("Mode: ");
+        Serial.println(modeNames[currentEffect.launchMode]);
       }
-      lastAscendButtonState = currentUpState;
+      // lastAscendButtonState = currentUpState;
 
       // 检测激光按钮状态变化
       if (currentLaserState != lastLaserButtonState) {
@@ -122,25 +125,31 @@ void loop() {
         lcd.clear();
         if (currentEffect.laserColor == LASER_GREEN) {
           lcd.print("Laser: Green");
+          Serial.println("Laser: Green");
         } else if (currentEffect.laserColor == LASER_RED) {
           lcd.print("Laser: Red");
+          Serial.println("Laser: Red");
         } else {
           lcd.print("Laser: None");
+          Serial.println("Laser: None");
         }
       }
-      lastLaserButtonState = currentLaserState;
+      // lastLaserButtonState = currentLaserState;
 
       // 检测预览按钮状态变化
       if (currentPreviewState != lastPreviewButtonState) {
+        Serial.println("Entering Preview");
         enterPreviewMode();
       }
-      lastPreviewButtonState = currentPreviewState;
+      // lastPreviewButtonState = currentPreviewState;
 
       // 检测保存按钮状态变化
       if (currentSaveState != lastSaveButtonState) {  // 修改这里，使用正确的变量名
         currentState = STATE_SAVE;
+        Serial.println("Entering Save State");
+
       }
-      lastSaveButtonState = currentSaveState;  // 修改这里，使用正确的变量名
+      // lastSaveButtonState = currentSaveState;  // 修改这里，使用正确的变量名
 
       // 读取滑杆 - 这些不需要状态检测，直接读取当前值
       currentEffect.maxBrightness = getBrightnessFromSlider();
@@ -185,6 +194,7 @@ void enterIdleMode() {
   currentState = STATE_IDLE;
   lcd.clear();
   lcd.print("IDLE MODE");
+  Serial.println("IDLE MODE");
 }
 
 /// 进入自定义模式
@@ -192,6 +202,7 @@ void enterCustomizeMode() {
   currentState = STATE_CUSTOMIZE;
   lcd.clear();
   lcd.print("CUSTOMIZE MODE");
+  Serial.println("CUSTOMIZE MODE");
 
   // 为确保只点亮前 20 颗LED，可先清空
   fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
@@ -207,6 +218,7 @@ void enterPreviewMode() {
   currentState = STATE_PREVIEW;
   lcd.clear();
   lcd.print("PREVIEW...");
+  Serial.println("PREVIEW...");
 }
 
 /// 保存当前效果
@@ -388,6 +400,7 @@ void processSerialCommand() {
       FireworkEffect effect;
       effect.color1.r = Serial.parseInt();
       effect.color1.g = Serial.parseInt();
+      
       effect.color1.b = Serial.parseInt();
       // ...读取其他参数...
       
@@ -396,3 +409,4 @@ void processSerialCommand() {
     }
   }
 }
+

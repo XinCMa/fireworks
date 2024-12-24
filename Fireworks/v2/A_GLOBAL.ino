@@ -10,8 +10,8 @@ const char* modeNames[] = {
 bool lastAscendButtonState = HIGH;
 bool lastLaserButtonState = HIGH;
 bool lastPreviewButtonState = HIGH;
-bool lastSaveButtonState = HIGH;
-bool lastCustomizeButtonState = HIGH;
+bool lastSaveButtonState = LOW;
+bool lastCustomizeButtonState = LOW;
 
 CRGB leds[TOTAL_LED_COUNT];
 Servo laserServo;
