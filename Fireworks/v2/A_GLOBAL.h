@@ -1,7 +1,7 @@
 #ifndef A_GLOBAL_H
 #define A_GLOBAL_H
 
-#include <FastLED.h>
+#include <FastLED.h>  
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
@@ -17,18 +17,20 @@
 #define CUSTOMIZE_BUTTON_PIN  10
 #define PREVIEW_BUTTON_PIN 5
 #define SAVE_BUTTON_PIN 8
+#define GRADIENT_BUTTON_PIN 11
+#define EXPLIDE_BUTTON_PIN 12
 
 #define BRIGHTNESS_SLIDER_PIN A12
 #define MIRROR_SLIDER_PIN     A13
 #define SIZE_SLIDER_PIN       A14
 #define SPEED_SLIDER_PIN      A15
 
-
-
 #define JOYSTICK1_X_PIN A0
 #define JOYSTICK1_Y_PIN A1
 #define JOYSTICK2_X_PIN A2
 #define JOYSTICK2_Y_PIN A3 
+#define JOY_DEADZONE 120 
+
 #define MSG_SAVE_EFFECT    'S'
 #define MSG_PLAY_EFFECT    'P'
 #define MSG_PREVIEW        'V'
@@ -54,8 +56,14 @@ enum LaunchMode {
 
 enum ExplodeMode {
   NORMAL,
-  SHATTER,
-  STAR
+  BLINK,
+  RANDOM
+};
+
+enum GradientMode{
+  GRAIDENT,
+  FADE,
+  SWITCH
 };
 
 enum LaserColor {
@@ -69,10 +77,20 @@ struct FireworkEffect {
   CRGB color2;
   uint8_t maxBrightness;
   LaunchMode launchMode;
+  GradientMode gradientMode;
+  ExplodeMode explodeMode;
   LaserColor laserColor;
   int mirrorAngle;
   int explosionLEDCount;
   int speedDelay;
+};
+
+struct ExplosionParams {
+  CRGB color1;          // 起始颜色 (渐变的第一端)
+  CRGB color2;          // 结束颜色 (渐变的第二端)
+  uint8_t speedDelay;   // 条带移动时的延时(毫秒)，数值越小移动越快
+  int stripLen;         // 条带长度 (如 30)
+  int moveRange;        // 条带移动范围 (如 80)
 };
 
 // 全局变量声明
@@ -86,13 +104,18 @@ extern const int maxEffect;
 
 extern SystemState currentState;
 extern FireworkEffect currentEffect;
+extern ExplosionParams currentExplosionParams;
 extern int laserPressCount;
 
-extern bool lastAscendButtonState;
-extern bool lastLaserButtonState;
-extern bool lastPreviewButtonState;
-extern bool lastSaveButtonState;
-extern bool lastCustomizeButtonState;
+extern bool defaultAscendButtonState;
+extern bool defaultLaserButtonState;
+extern bool defaultPreviewButtonState;
+extern bool defaultSaveButtonState;
+extern bool defaultCustomizeButtonState;
+extern bool defaultExplodeButtonState;
+extern bool defaultGradientButtonState;
+
+
 
 
 #endif
