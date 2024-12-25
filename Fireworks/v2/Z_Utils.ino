@@ -305,7 +305,7 @@ int getMirrorAngleFromSlider() {
 int getExplosionLEDCountFromSlider() {
   int val = analogRead(SIZE_SLIDER_PIN);
   // 您可根据总LED数量做映射
-  return map(val, 0, 1023, 0, TOTAL_LED_COUNT);
+  return map(val, 0, 1023, TOTAL_LED_COUNT-50, TOTAL_LED_COUNT);
 }
 
 // 滑杆控制升空与爆炸速度

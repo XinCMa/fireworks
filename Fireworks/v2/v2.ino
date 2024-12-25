@@ -90,6 +90,9 @@ void loop() {
 
 
     case STATE_CUSTOMIZE:{
+      if (digitalRead(CUSTOMIZE_BUTTON_PIN) == LOW) {
+        enterIdleMode();
+      }
       // 只点亮前 20 颗灯珠做预览
       // color1 由前 10 颗, color2 由后 10 颗
       currentEffect.color1 = getColorFromJoystick(JOYSTICK1_X_PIN, JOYSTICK1_Y_PIN); // 占位：用实际引脚
@@ -116,6 +119,7 @@ void loop() {
       bool currentLaserState = digitalRead(LASER_BUTTON_PIN);
       bool currentPreviewState = digitalRead(PREVIEW_BUTTON_PIN);
       bool currentSaveState = digitalRead(SAVE_BUTTON_PIN);
+      
 
 
       if (currentExplodeState != defaultExplodeButtonState) {
