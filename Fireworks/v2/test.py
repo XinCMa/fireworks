@@ -16,6 +16,41 @@ def generate_random_effect():
         'speedDelay': random.randint(3,8)
     }
 
+import random
+import colorsys
+
+def generate_choice_random_effect():
+    # Helper function to calculate contrast
+    def calculate_brightness(rgb):
+        # Perceived brightness formula
+        return 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]
+
+    # Generate two random colors with strong contrast
+    while True:
+        color1 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        color2 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        
+        brightness1 = calculate_brightness(color1)
+        brightness2 = calculate_brightness(color2)
+        
+        # Check brightness contrast difference
+        if abs(brightness1 - brightness2) > 125:  # Adjust this threshold as needed
+            break
+
+    return {
+        'color1': color1,
+        'color2': color2,
+        'maxBrightness': random.randint(100, 255),
+        'launchMode': random.randint(0, 2),
+        'gradientMode': random.randint(1, 2),
+        'explodeMode': random.randint(1, 2),
+        'laserColor': random.randint(0, 1),
+        'mirrorAngle': random.randint(0, 30),
+        'explosionLEDCount': random.randint(10, 50),
+        'speedDelay': random.randint(3, 8)
+    }
+
+
 def send_effect(ser, effect):
     command = f"P,{effect['color1'][0]},{effect['color1'][1]},{effect['color1'][2]}," + \
               f"{effect['color2'][0]},{effect['color2'][1]},{effect['color2'][2]}," + \
@@ -37,7 +72,7 @@ def main():
         time.sleep(2)  # 等待连接稳定
         
         while True:
-            effect = generate_random_effect()
+            effect = generate_choice_random_effect()
             if send_effect(ser, effect):
                 time.sleep(10)  # 每5秒发送一个新效果
             

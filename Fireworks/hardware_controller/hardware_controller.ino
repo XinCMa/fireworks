@@ -243,6 +243,8 @@ void explodeFirework(const FireworkEffect &effect) {
             explosionSwitchBlink(params);
         }
     }
+
+    
 }
 
 // 清空串口缓冲区

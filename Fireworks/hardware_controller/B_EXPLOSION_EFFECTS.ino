@@ -36,6 +36,7 @@ void explosionGradientNormal(const ExplosionParams &params) {
     }
     FastLED.show();
     delay(params.speedDelay);
+    
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
@@ -56,6 +57,8 @@ void explosionGradientNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 随机闪烁 + 内部渐变
@@ -85,6 +88,8 @@ void explosionGradientRandom(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 定时闪烁 + 内部渐变
@@ -116,6 +121,8 @@ void explosionGradientBlink(const ExplosionParams &params) {
     }
     FastLED.show();
     delay(params.speedDelay);
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
@@ -140,6 +147,8 @@ void explosionGradientBlink(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // ===== 颜色效果2: 整体渐变 =====
@@ -200,6 +209,8 @@ void explosionFadeNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 随机闪烁 + 整体渐变
@@ -236,6 +247,8 @@ void explosionFadeRandom(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 定时闪烁 + 整体渐变
@@ -303,6 +316,8 @@ void explosionFadeBlink(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // ===== 颜色效果3: 颜色切换 =====
@@ -352,6 +367,8 @@ void explosionSwitchNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 随机闪烁 + 颜色切换
@@ -382,6 +399,8 @@ void explosionSwitchRandom(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 定时闪烁 + 颜色切换
@@ -433,6 +452,8 @@ void explosionSwitchBlink(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+      fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    FastLED.show();
 }
 
 // 辅助函数，打印爆炸效果参数
