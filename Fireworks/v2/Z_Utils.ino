@@ -184,24 +184,54 @@ void explodeFirework(const FireworkEffect &effect) {
  **************************************************/
 
 void checkNumpadInput() {
-  char key = keypad.getKey(); // 获取按键输入
-  if (key) { // 如果检测到按键
-    Serial.print("Key pressed: ");
-    Serial.println(key);
-
-    // 检查是否是有效的数字键
-    if (key >= '0' && key <= '9') {
-      int keyEffect = key - '0'; // 将字符转为整数
-      if (keyEffect >= minEffect && keyEffect <= maxEffect) {
-        Serial.print("Playing effect: ");
-        Serial.println(keyEffect);
-      } else {
-        Serial.println("Invalid effect number.");
+  char key = keypad.getKey();
+  if (!key) return;  // 没有按键输入
+  
+  lcd.setCursor(0, 1);  // 使用LCD第二行显示输入
+  
+  switch (key) {
+    case '*':  // 播放键
+      if (inputIndex > 0) {
+        // 将输入buffer转换为数字
+        int effectNumber = atoi(inputBuffer);
+        Serial.print("Request to play effect: ");
+        Serial.println(effectNumber);
+        
+        // 发送播放请求到上位机
+        String playCmd = String("R,") + String(effectNumber) + "\n";
+        Serial.print(playCmd);  // R,表示请求播放
+        
+        // 清空输入
+        clearInput();
+        lcd.setCursor(0, 1);
+        lcd.print("                ");  // 清空LCD第二行
       }
-    } else {
-      Serial.println("Non-numeric key pressed.");
-    }
+      break;
+      
+    case '#':  // 清除键
+      clearInput();
+      lcd.setCursor(0, 1);
+      lcd.print("                ");  // 清空LCD第二行
+      break;
+      
+    default:  // 数字键
+      if (key >= '0' && key <= '9' && inputIndex < MAX_INPUT_DIGITS) {
+        inputBuffer[inputIndex++] = key;
+        inputBuffer[inputIndex] = '\0';  // 确保字符串正确终止
+        
+        // 显示当前输入
+        lcd.setCursor(0, 1);
+        lcd.print("Effect: ");
+        lcd.print(inputBuffer);
+      }
+      break;
   }
+}
+
+// 清空输入缓冲区
+void clearInput() {
+  memset(inputBuffer, 0, sizeof(inputBuffer));
+  inputIndex = 0;
 }
 
 /************************************************** 
@@ -319,17 +349,47 @@ int getSpeedFromSlider() {
 void processSerialCommand() {
   if (Serial.available() > 0) {
     char cmdType = Serial.read();
+    
     if (cmdType == MSG_PLAY_EFFECT) {
-      // 读取效果参数
+      // 读取完整的效果参数
       FireworkEffect effect;
+      
+      // 1. 读取color1
       effect.color1.r = Serial.parseInt();
       effect.color1.g = Serial.parseInt();
-      
       effect.color1.b = Serial.parseInt();
-      // ...读取其他参数...
+      
+      // 2. 读取color2
+      effect.color2.r = Serial.parseInt();
+      effect.color2.g = Serial.parseInt();
+      effect.color2.b = Serial.parseInt();
+      
+      // 3. 读取其他参数
+      effect.maxBrightness = Serial.parseInt();
+      effect.launchMode = static_cast<LaunchMode>(Serial.parseInt());
+      effect.gradientMode = static_cast<GradientMode>(Serial.parseInt());
+      effect.explodeMode = static_cast<ExplodeMode>(Serial.parseInt());
+      effect.laserColor = static_cast<LaserColor>(Serial.parseInt());
+      effect.mirrorAngle = Serial.parseInt();
+      effect.explosionLEDCount = Serial.parseInt();
+      effect.speedDelay = Serial.parseInt();
+
+      // 打印调试信息
+      Serial.println("Received effect parameters:");
+      Serial.print("Launch Mode: ");
+      Serial.println(modeNames[effect.launchMode]);
+      Serial.print("Explosion LED Count: ");
+      Serial.println(effect.explosionLEDCount);
+      Serial.print("Speed Delay: ");
+      Serial.println(effect.speedDelay);
       
       // 执行效果
       playEffect(effect);
+    }
+    
+    // 清空剩余的串口缓冲区
+    while(Serial.available() > 0) {
+      Serial.read();
     }
   }
 }

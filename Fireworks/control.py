@@ -115,6 +115,22 @@ class FireworkController:
                         self.start_firework_sequence()
                     return
 
+        # 处理播放请求
+        if msg.startswith('R,'):  # R = Request to play
+            try:
+                effect_number = int(msg.split(',')[1])
+                print(f"Received request to play effect {effect_number}")
+                
+                # 检查是否存在此效果
+                if effect_number in self.effects_data:
+                    print(f"Playing requested effect {effect_number}")
+                    self.play_effect(effect_number)
+                else:
+                    print(f"Effect {effect_number} not found")
+                
+            except (IndexError, ValueError) as e:
+                print(f"Invalid play request: {e}")
+
         # 2. 保存效果
         if msg.startswith('S,'):
             parts = msg.split(',')

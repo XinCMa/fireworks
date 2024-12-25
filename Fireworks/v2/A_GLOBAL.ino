@@ -15,6 +15,10 @@ bool defaultCustomizeButtonState = LOW;
 bool defaultExplodeButtonState = LOW;
 bool defaultGradientButtonState = LOW;
 
+// 数字输入缓冲区
+char inputBuffer[MAX_INPUT_DIGITS + 1] = {0};
+int inputIndex = 0;
+
 char keys[4][3] = {
   {'1', '2', '3'},
   {'4', '5', '6'},

@@ -38,6 +38,11 @@
 #define MSG_PREVIEW        'V'
 #define MSG_TEST_DATA      'T'
 
+// 数字输入相关
+#define MAX_INPUT_DIGITS 3  // 最多输入3位数
+extern char inputBuffer[MAX_INPUT_DIGITS + 1];  // +1 用于存储结束符
+extern int inputIndex;  // 当前输入位置
+
 // 在枚举定义后添加 modeNames 数组声明
 extern const char* modeNames[];
 
