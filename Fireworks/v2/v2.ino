@@ -79,7 +79,6 @@ void loop() {
           
   switch (currentState) {
     case STATE_IDLE:{
-      Serial.println("Entererd State of IDLE IN LOOP");
       if (digitalRead(CUSTOMIZE_BUTTON_PIN) == HIGH) {
         enterCustomizeMode();
       }
@@ -169,14 +168,13 @@ void loop() {
 
       // 检测预览按钮状态变化
       if (currentPreviewState != defaultPreviewButtonState) {
-        Serial.println("Entering Preview State");
         enterPreviewMode();
       }
 
       // 检测保存按钮状态变化
       if (currentSaveState != defaultSaveButtonState) {  // 修改这里，使用正确的变量名
         currentState = STATE_SAVE;
-        Serial.println("Entering Save State");
+        enterSaveMode();
       }
 
       // 读取滑杆 - 这些不需要状态检测，直接读取当前值
@@ -193,7 +191,6 @@ void loop() {
 
     case STATE_PREVIEW:{
       // 执行一次发射，但不保存
-      Serial.println("Entererd State of Preview in LOOP");
       playEffect(currentEffect);
 
       enterCustomizeMode();
@@ -201,7 +198,6 @@ void loop() {
     }
 
     case STATE_SAVE:{
-      Serial.println("Entererd State of Save in LOOP");
       saveCurrentEffect();
 
       enterIdleMode();
@@ -209,7 +205,6 @@ void loop() {
     }
 
     case STATE_PLAY_SAVED:{
-      Serial.println("Entererd State of Preview in LOOP");
       // 如果有 numpad 输入，选定播放
       // 放到一个函数里去做即可
       break;

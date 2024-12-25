@@ -30,7 +30,14 @@ void enterPreviewMode() {
   currentState = STATE_PREVIEW;
   lcd.clear();
   lcd.print("PREVIEW...");
-  Serial.println("PREVIEW...");
+  Serial.println("PREVIEW MODE");
+}
+
+void enterSaveMode() {
+  currentState = STATE_SAVE;
+  lcd.clear();
+  lcd.print("SAVE MODE");
+  Serial.println("SAVE MODE");
 }
 
 /// 保存当前效果
