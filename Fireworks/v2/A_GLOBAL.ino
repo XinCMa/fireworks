@@ -8,12 +8,16 @@ const char* modeNames[] = {
 
 
 bool defaultAscendButtonState = HIGH;
-bool defaultLaserButtonState = HIGH;
+bool defaultLaserButtonState = LOW;
 bool defaultPreviewButtonState = HIGH;
-bool defaultSaveButtonState = LOW;
+bool defaultSaveButtonState = HIGH;
 bool defaultCustomizeButtonState = LOW;
-bool defaultExplodeButtonState = HIGH;
-bool defaultGradientButtonState = HIGH;
+bool defaultExplodeButtonState = LOW;
+bool defaultGradientButtonState = LOW;
+
+// 数字输入缓冲区
+char inputBuffer[MAX_INPUT_DIGITS + 1] = {0};
+int inputIndex = 0;
 
 char keys[4][3] = {
   {'1', '2', '3'},
@@ -36,4 +40,4 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 SystemState currentState = STATE_IDLE;
 FireworkEffect currentEffect;
-int laserPressCount
+int laserPressCount;

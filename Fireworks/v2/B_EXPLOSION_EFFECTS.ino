@@ -1,7 +1,13 @@
 #include "A_GLOBAL.h"
 #define BLINK_INTERVAL 50       // 闪烁间隔（毫秒）
 
-
+ExplosionParams defaultConfig = {
+    CRGB::Red,         // color1: 渐变起始颜色 (红)
+    CRGB::Yellow,      // color2: 渐变结束颜色 (黄)
+    20,                // speedDelay: 每步延时
+    30,                // stripLen: 条带长度
+    230                // moveRange: 条带移动范围
+};
 
 // ===== 颜色效果1: 条带内部渐变 =====
 
