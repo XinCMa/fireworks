@@ -14,7 +14,7 @@ ExplosionParams defaultConfig = {
 // 普通移动 + 内部渐变
 void explosionGradientNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -37,7 +37,7 @@ void explosionGradientNormal(const ExplosionParams &params) {
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
-  for (int pos = startPos; pos >= endPos; pos--) {
+  for (int pos = startPos; pos > endPos; pos--) {
     // 清空灯带
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
     
@@ -120,7 +120,7 @@ void explosionGradientBlink(const ExplosionParams &params) {
     bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
     
     if (shouldLight) {
-      // 绘制固定长度的渐变条带
+      // 绘���固定长度的渐变条带
       for (int i = 0; i < params.stripLen; i++) {
         int ledIndex = pos - i;
         if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
@@ -141,7 +141,7 @@ void explosionGradientBlink(const ExplosionParams &params) {
 // 普通移动 + 整体渐变
 void explosionFadeNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -169,7 +169,7 @@ void explosionFadeNormal(const ExplosionParams &params) {
   }
 
   // 条带长度固定后从 startPos 移动到 endPos，同时颜色从 color1 渐变到 color2
-  for (int pos = startPos; pos >= endPos; pos--) {
+  for (int pos = startPos; pos > endPos; pos--) {
     float colorProgress = float(startPos - pos) / float(startPos - endPos);
     // 清空灯带
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
@@ -246,7 +246,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
       // 计算当前的基础颜色
       CRGB baseColor = blend(params.color1, params.color2, uint8_t(colorProgress * 255));
       
-      // 在 [pos-growLen+1, pos] 范围内绘制亮度渐变
+      // �� [pos-growLen+1, pos] 范围内绘制亮度渐变
       for (int i = 0; i < growLen; i++) {
         int ledIndex = startPos - i;
         if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
@@ -270,6 +270,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
     bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
+    CRGB currentColor = ((millis() / 500) % 2 == 0) ? params.color1 : params.color2;
     
     if (shouldLight) {
       // 计算当前的基础颜色
@@ -298,7 +299,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
 // 普通移动 + 颜色切换
 void explosionSwitchNormal(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -321,7 +322,7 @@ void explosionSwitchNormal(const ExplosionParams &params) {
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
-  for (int pos = startPos; pos >= endPos; pos--) {
+  for (int pos = startPos; pos > endPos; pos--) {
     // 清空灯带
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
     
