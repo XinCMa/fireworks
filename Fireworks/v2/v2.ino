@@ -30,6 +30,12 @@ void checkNumpadInput();
 // 添加串口命令处理函数
 void processSerialCommand();
 
+// 在全局变量区域添加这些变量来记录上一次的值
+uint8_t lastBrightness = 0;
+int lastMirrorAngle = 0;
+int lastExplosionLEDCount = 0;
+int lastSpeedDelay = 0;
+
 /************************************************** 
  *                   setup()
  **************************************************/
@@ -45,7 +51,7 @@ void setup() {
 
   // 初始化舵机
   laserServo.attach(SERVO_PIN);
-  // 假设激光舵机 0 度对准“关闭”状态
+  // 假设激光舵机 0 度对准"关闭"状态
   laserServo.write(0);
 
   // 初始化各按钮
@@ -182,14 +188,48 @@ void loop() {
         enterSaveMode();
       }
 
-      // 读取滑杆 - 这些不需要状态检测，直接读取当前值
-      currentEffect.maxBrightness = getBrightnessFromSlider();
-      currentEffect.mirrorAngle = getMirrorAngleFromSlider();
-      currentEffect.explosionLEDCount = getExplosionLEDCountFromSlider();
-      currentEffect.speedDelay = getSpeedFromSlider();
+      // 读取滑杆值并检查变化
+      uint8_t currentBrightness = getBrightnessFromSlider();
+      int currentMirrorAngle = getMirrorAngleFromSlider();
+      int currentExplosionLEDCount = getExplosionLEDCountFromSlider();
+      int currentSpeedDelay = getSpeedFromSlider();
 
+<<<<<<< Updated upstream
       // 此处还可添加“(3)条带的颜色（渐变）效果”与“(4)条带的闪烁方式”的输入逻辑，留待后续完善
 
+=======
+      // 只在值发生变化时更新并打印
+      if (currentBrightness != lastBrightness) {
+        lastBrightness = currentBrightness;
+        currentEffect.maxBrightness = currentBrightness;
+        Serial.print("Brightness: ");
+        Serial.println(currentBrightness);
+      }
+
+      if (currentMirrorAngle != lastMirrorAngle) {
+        lastMirrorAngle = currentMirrorAngle;
+        currentEffect.mirrorAngle = currentMirrorAngle;
+        Serial.print("Mirror Angle: ");
+        Serial.println(currentMirrorAngle);
+      }
+
+      if (currentExplosionLEDCount != lastExplosionLEDCount) {
+        lastExplosionLEDCount = currentExplosionLEDCount;
+        currentEffect.explosionLEDCount = currentExplosionLEDCount;
+        Serial.print("Explosion LED Count: ");
+        Serial.println(currentExplosionLEDCount);
+      }
+
+      if (currentSpeedDelay != lastSpeedDelay) {
+        lastSpeedDelay = currentSpeedDelay;
+        currentEffect.speedDelay = currentSpeedDelay;
+        Serial.print("Speed Delay: ");
+        Serial.println(currentSpeedDelay);
+      }
+
+      // 此处还可添加"(3)条带的颜色（渐变）效果"与"(4)条带的闪烁方式"的输入逻辑，留待后续完善
+      delay(50);
+>>>>>>> Stashed changes
 
       break;
     }

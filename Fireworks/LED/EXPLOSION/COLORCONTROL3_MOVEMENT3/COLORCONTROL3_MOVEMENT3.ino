@@ -2,7 +2,8 @@
 
 // ========== 根据你的实际情况修改 ========== //
 #define LED_PIN     6           // 输出到灯带的数据引脚
-#define TOTAL_LED_COUNT    280     // 你的灯带总数
+#define TOTAL_LED_COUNT    60     // 你的灯带总数
+#define BLINK_INTERVAL 50       // 闪烁间隔（毫秒）
 // =========================================== //
 
 // 创建 LED 数组
@@ -18,20 +19,20 @@ struct ExplosionParams {
 };
 
 ExplosionParams explosionCfg = {
-  CRGB::Red,           // color1: 渐变起始颜色 (红)
-  CRGB::Yellow,        // color2: 渐变结束颜色 (黄)
+  CRGB::White,           // color1: 渐变起始颜色 (红)
+  CRGB::Blue,        // color2: 渐变结束颜色 (黄)
   20,                  // speedDelay: 每步延时
-  30,                  // stripLen: 条带长度
-  230                  // moveRange: 条带移动范围
+  20,                  // stripLen: 条带长度
+  30                  // moveRange: 条带移动范围
 };
 
 // 函数声明
 void explosionEffect(const ExplosionParams &params);
-void drawGrowingGradientBar(int pos, const ExplosionParams &params, int growLen);
+void drawGrowingBar(int pos, const ExplosionParams &params, int growLen);
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("==== Explosion Effect: Gradient Bar ====");
+  Serial.println("==== Explosion Effect: Blinking Color-Switching Bar ====");
 
   // 初始化 FastLED
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
@@ -54,7 +55,7 @@ void loop() {
 
 /**
  * @brief 执行一次爆炸效果
- *        条带颜色从 color1 → color2 渐变，长度 stripLen
+ *        条带颜色在 color1 和 color2 之间切换，长度 stripLen
  *        移动范围限制为 moveRange，没有回退。
  *        条带从第一个灯珠开始逐渐变长。
  */
@@ -65,36 +66,38 @@ void explosionEffect(const ExplosionParams &params) {
 
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
-    drawGrowingGradientBar(startPos, params, growLen);
+    drawGrowingBar(startPos, params, growLen);
     FastLED.show();
     delay(params.speedDelay);
   }
 
   // 条带长度固定后从 startPos 移动到 endPos
   for (int pos = startPos; pos >= endPos; pos--) {
-    drawGrowingGradientBar(pos, params, params.stripLen);
+    drawGrowingBar(pos, params, params.stripLen);
     FastLED.show();
     delay(params.speedDelay);
   }
 }
 
 /**
- * @brief 绘制一个逐渐变长的条带
- *        条带从 color1 → color2 渐变，长度为 growLen (逐渐延长)
+ * @brief 绘制一个逐渐变长的条带，带闪烁效果
+ *        条带颜色在 color1 和 color2 之间切换
  */
-void drawGrowingGradientBar(int pos, const ExplosionParams &params, int growLen) {
+void drawGrowingBar(int pos, const ExplosionParams &params, int growLen) {
   // 清空灯带
   fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
 
-  // 在 [pos-growLen+1, pos] 范围内绘制渐变条带
-  for (int i = 0; i < growLen; i++) {
-    int ledIndex = pos - i;
-    if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
-
-    // 计算渐变颜色：从 color1 → color2
-    float ratio = float(i) / float(params.stripLen - 1);
-    CRGB gradColor = blend(params.color1, params.color2, uint8_t(ratio * 255));
-
-    leds[ledIndex] = gradColor;
+  // 使用 millis() 来控制闪烁和颜色切换
+  bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;  // 闪烁控制
+  CRGB currentColor = ((millis() / 500) % 2 == 0) ? params.color1 : params.color2;  // 颜色切换控制
+  
+  if (shouldLight) {
+    // 在 [pos-growLen+1, pos] 范围内绘制单色条带
+    for (int i = 0; i < growLen; i++) {
+      int ledIndex = pos - i;
+      if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
+      
+      leds[ledIndex] = currentColor;
+    }
   }
 } 

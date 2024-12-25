@@ -9,7 +9,11 @@
 // 常量与引脚定义
 #define LED_PIN          7
 #define TOTAL_LED_COUNT  280
+<<<<<<< Updated upstream
 #define PREVIEW_LED_COUNT 280
+=======
+#define PREVIEW_LED_COUNT 180
+>>>>>>> Stashed changes
 
 #define SERVO_PIN       9
 
