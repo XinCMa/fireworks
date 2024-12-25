@@ -194,9 +194,7 @@ void checkNumpadInput() {
       if (inputIndex > 0) {
         // 将输入buffer转换为数字
         int effectNumber = atoi(inputBuffer);
-        Serial.print("Request to play effect: ");
-        Serial.println(effectNumber);
-        
+                
         // 发送播放请求到上位机
         String playCmd = String("R,") + String(effectNumber) + "\n";
         Serial.print(playCmd);  // R,表示请求播放

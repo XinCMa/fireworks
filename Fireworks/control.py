@@ -48,6 +48,7 @@ class FireworkController:
         self.test_data = []
         self.current_state = 'IDLE'
         self.firework_queue = []  # 存储要播放的烟花序号
+        self.is_sequence_playing = False  # 添加标志来追踪烟花长河状态
         self.setup_storage()
         self.load_from_file()
     
@@ -107,12 +108,14 @@ class FireworkController:
         if 'MODE' in msg:
             for state, state_msg in STATES.items():
                 if state_msg in msg:
+                    prev_state = self.current_state
                     self.current_state = state
-                    print(f"State changed to: {self.current_state}")
+                    print(f"State changed from {prev_state} to {self.current_state}")
                     
-                    # 当进入IDLE模式时,开始播放烟花长河
                     if state == 'IDLE' and len(self.effects_data) > 0:
                         self.start_firework_sequence()
+                    elif state == 'CUSTOMIZE':
+                        self.stop_firework_sequence()
                     return
 
         # 处理播放请求
@@ -179,6 +182,13 @@ class FireworkController:
             })
             print(f"Test data received: {parts[1]} - {parts[2]}")
     
+    def stop_firework_sequence(self):
+        """停止烟花长河播放"""
+        if self.is_sequence_playing:
+            print("Stopping firework sequence due to mode change")
+            self.firework_queue.clear()
+            self.is_sequence_playing = False
+
     def play_effect(self, index):
         if index in self.effects_data:
             effect = self.effects_data[index]
@@ -198,19 +208,21 @@ class FireworkController:
         print("Starting firework sequence...")
         # 按保存顺序创建播放队列
         self.firework_queue = list(self.effects_data.keys())
+        self.is_sequence_playing = True
         self.play_next_firework()
 
     def play_next_firework(self):
         """播放队列中的下一个烟花"""
-        if not self.firework_queue:
-            print("Firework sequence completed")
+        if not self.firework_queue or not self.is_sequence_playing:
+            self.is_sequence_playing = False
+            print("Firework sequence stopped")
             return
 
         index = self.firework_queue.pop(0)
         self.play_effect(index)
         
         # 设置下一个烟花的播放
-        if self.firework_queue:
+        if self.firework_queue and self.is_sequence_playing:
             # 3秒后播放下一个
             time.sleep(3)
             self.play_next_firework()
