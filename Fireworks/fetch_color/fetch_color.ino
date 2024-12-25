@@ -2,14 +2,14 @@
 
 // 灯带参数
 #define LED_PIN     7          // LED 数据引脚
-#define NUM_LEDS    20         // 灯珠数量
+#define NUM_LEDS    280        // 灯珠数量
 #define BRIGHTNESS  255        // 最大亮度
 
 CRGB leds[NUM_LEDS];           // 创建 LED 数组
 
 // Joystick 参数
-#define JOY_X_PIN A0           // X 轴模拟信号
-#define JOY_Y_PIN A1           // Y 轴模拟信号
+#define JOY_X_PIN A1          // X 轴模拟信号
+#define JOY_Y_PIN A2          // Y 轴模拟信号
 #define JOY_DEADZONE 120        // 死区范围，避免抖动
 
 // 状态变量

@@ -95,15 +95,16 @@ void loop() {
       }
       // 只点亮前 20 颗灯珠做预览
       // color1 由前 10 颗, color2 由后 10 颗
-      currentEffect.color1 = getColorFromJoystick(JOYSTICK1_X_PIN, JOYSTICK1_Y_PIN); // 占位：用实际引脚
-      currentEffect.color2 = getColorFromJoystick(JOYSTICK2_X_PIN, JOYSTICK2_Y_PIN); // 占位：用实际引脚
+      currentEffect.color1 = getColorFromJoystickA(JOYSTICK1_X_PIN, JOYSTICK1_Y_PIN); // 占位：用实际引脚
+      currentEffect.color2 = getColorFromJoystickB(JOYSTICK2_X_PIN, JOYSTICK2_Y_PIN); // 占位：用实际引脚
+
 
       // 设置预览亮度
       currentEffect.maxBrightness = getBrightnessFromSlider();
 
       // 展示这 20 颗灯珠
       for (int i = 0; i < PREVIEW_LED_COUNT; i++) {
-        if (i < 10) {
+        if (i < 70) {
           leds[i] = currentEffect.color1;
         } else {
           leds[i] = currentEffect.color2;
@@ -129,7 +130,7 @@ void loop() {
         lcd.print(currentEffect.explodeMode);
         Serial.print("Explode: ");
         Serial.println(currentEffect.explodeMode);
-        delay(500);
+        delay(50);
       } 
 
       if (currentGradientState != defaultGradientButtonState) {
@@ -139,7 +140,7 @@ void loop() {
         lcd.print(currentEffect.gradientMode);
         Serial.print("Gradient: ");
         Serial.println(currentEffect.gradientMode);
-        delay(500);
+        delay(50);
       }
 
       // 检测上升模式按钮状态变化
@@ -150,7 +151,7 @@ void loop() {
         lcd.print(modeNames[currentEffect.launchMode]);
         Serial.print("Mode: ");
         Serial.println(modeNames[currentEffect.launchMode]);
-        delay(500);
+        delay(50);
       }
 
       // 检测激光按钮状态变化
@@ -167,7 +168,7 @@ void loop() {
           lcd.print("Laser: None");
           Serial.println("Laser: None");
         }
-        delay(500);
+        delay(50);
       }
 
       // 检测预览按钮状态变化
@@ -188,7 +189,7 @@ void loop() {
       currentEffect.speedDelay = getSpeedFromSlider();
 
       // 此处还可添加“(3)条带的颜色（渐变）效果”与“(4)条带的闪烁方式”的输入逻辑，留待后续完善
-      delay(50);
+
 
       break;
     }

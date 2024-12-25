@@ -15,6 +15,14 @@ bool defaultCustomizeButtonState = LOW;
 bool defaultExplodeButtonState = LOW;
 bool defaultGradientButtonState = LOW;
 
+uint8_t lastHueA = 0;           // 记录最后的颜色 Hue 值
+uint8_t lastHueB = 0;           // 记录最后的颜色 Hue 值
+bool inDeadzoneA = true;        // Joystick 是否在死区
+bool inDeadzoneB = true;        // Joystick 是否在死区
+
+
+
+
 // 数字输入缓冲区
 char inputBuffer[MAX_INPUT_DIGITS + 1] = {0};
 int inputIndex = 0;
