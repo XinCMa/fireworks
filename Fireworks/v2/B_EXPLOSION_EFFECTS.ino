@@ -54,6 +54,24 @@ void explosionGradientNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+
+  // 新增：条带尾部消失效果
+  for (int fadeLen = params.stripLen; fadeLen > 0; fadeLen--) {
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    
+    // 绘制逐渐缩短的渐变条带
+    for (int i = 0; i < fadeLen; i++) {
+      int ledIndex = endPos - i;
+      if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
+
+      float ratio = float(i) / float(params.stripLen - 1);
+      CRGB gradColor = blend(params.color1, params.color2, uint8_t(ratio * 255));
+
+      leds[ledIndex] = gradColor;
+    }
+    FastLED.show();
+    delay(params.speedDelay);
+  }
 }
 
 // 随机闪烁 + 内部渐变
@@ -120,7 +138,7 @@ void explosionGradientBlink(const ExplosionParams &params) {
     bool shouldLight = (millis() % (BLINK_INTERVAL * 2)) < BLINK_INTERVAL;
     
     if (shouldLight) {
-      // 绘���固定长度的渐变条带
+      // 绘制固定长度的渐变条带
       for (int i = 0; i < params.stripLen; i++) {
         int ledIndex = pos - i;
         if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
@@ -192,6 +210,28 @@ void explosionFadeNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+
+  // 新增：条带尾部消失效果
+  for (int fadeLen = params.stripLen; fadeLen > 0; fadeLen--) {
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    
+    // 计算当前的基础颜色 (保持在最终颜色)
+    CRGB baseColor = params.color2;
+    
+    // 绘制逐渐缩短的条带
+    for (int i = 0; i < fadeLen; i++) {
+      int ledIndex = endPos - i;
+      if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
+
+      float brightnessRatio = 1.0 - (float(i) / float(params.stripLen - 1));
+      CRGB pixelColor = baseColor;
+      pixelColor.nscale8(uint8_t(brightnessRatio * 255));
+
+      leds[ledIndex] = pixelColor;
+    }
+    FastLED.show();
+    delay(params.speedDelay);
+  }
 }
 
 // 随机闪烁 + 整体渐变
@@ -246,7 +286,7 @@ void explosionFadeBlink(const ExplosionParams &params) {
       // 计算当前的基础颜色
       CRGB baseColor = blend(params.color1, params.color2, uint8_t(colorProgress * 255));
       
-      // �� [pos-growLen+1, pos] 范围内绘制亮度渐变
+      // 在 [pos-growLen+1, pos] 范围内绘制亮度渐变
       for (int i = 0; i < growLen; i++) {
         int ledIndex = startPos - i;
         if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
@@ -332,6 +372,24 @@ void explosionSwitchNormal(const ExplosionParams &params) {
     // 在 [pos-stripLen+1, pos] 范围内绘制单色条带
     for (int i = 0; i < params.stripLen; i++) {
       int ledIndex = pos - i;
+      if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
+      
+      leds[ledIndex] = currentColor;
+    }
+    FastLED.show();
+    delay(params.speedDelay);
+  }
+
+  // 新增：条带尾部消失效果
+  for (int fadeLen = params.stripLen; fadeLen > 0; fadeLen--) {
+    fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+    
+    // 使用 millis() 来决定当前显示哪种颜色
+    CRGB currentColor = ((millis() / 500) % 2 == 0) ? params.color1 : params.color2;
+    
+    // 绘制逐渐缩短的条带
+    for (int i = 0; i < fadeLen; i++) {
+      int ledIndex = endPos - i;
       if (ledIndex < 0 || ledIndex >= TOTAL_LED_COUNT) continue;
       
       leds[ledIndex] = currentColor;
