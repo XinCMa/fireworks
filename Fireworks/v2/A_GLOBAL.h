@@ -93,6 +93,23 @@ struct ExplosionParams {
   int moveRange;        // 条带移动范围 (如 80)
 };
 
+struct AscendParams {
+  uint8_t maxBrightness;  // 头部(大索引)的最大亮度
+  uint8_t speedDelay;     // 条带移动时的延时(毫秒)，数值越小移动越快
+  int stripLen;           // 条带长度
+};
+
+
+struct BarsWithGapParams {
+  uint8_t  maxBrightness;  // 条带内头部最亮的亮度
+  uint8_t  speedDelay;     // 每次移动一步后的延时 (毫秒)
+  int      segCount;       // 短条带的数量 (5)
+  int      segLen;         // 每个短条带的长度 (10)
+  int      gapLen;         // 相邻条带之间的黑灯数 (5)
+};
+
+
+
 // 全局变量声明
 extern CRGB leds[TOTAL_LED_COUNT];
 extern Servo laserServo;
