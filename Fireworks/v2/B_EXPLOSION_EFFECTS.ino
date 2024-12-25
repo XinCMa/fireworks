@@ -72,12 +72,14 @@ void explosionGradientNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+  FastLED.show();
 }
 
 // 随机闪烁 + 内部渐变
 void explosionGradientRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -104,7 +106,7 @@ void explosionGradientRandom(const ExplosionParams &params) {
 // 定时闪烁 + 内部渐变
 void explosionGradientBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -192,7 +194,7 @@ void explosionFadeNormal(const ExplosionParams &params) {
     // 清空灯带
     fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
     
-    // 计算当前的基础颜色
+    // ���算当前的基础颜色
     CRGB baseColor = blend(params.color1, params.color2, uint8_t(colorProgress * 255));
     
     // 在 [pos-stripLen+1, pos] 范围内绘制亮度渐变
@@ -232,12 +234,14 @@ void explosionFadeNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+  FastLED.show();
 }
 
 // 随机闪烁 + 整体渐变
 void explosionFadeRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos，同时颜色从 color1 渐变到 color2
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -271,7 +275,7 @@ void explosionFadeRandom(const ExplosionParams &params) {
 // 定时闪烁 + 整体渐变
 void explosionFadeBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
@@ -397,12 +401,14 @@ void explosionSwitchNormal(const ExplosionParams &params) {
     FastLED.show();
     delay(params.speedDelay);
   }
+  fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+  FastLED.show();
 }
 
 // 随机闪烁 + 颜色切换
 void explosionSwitchRandom(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
 
   // 条带长度固定后从 startPos 移动到 endPos
   for (int pos = startPos; pos >= endPos; pos--) {
@@ -430,7 +436,7 @@ void explosionSwitchRandom(const ExplosionParams &params) {
 // 定时闪烁 + 颜色切换
 void explosionSwitchBlink(const ExplosionParams &params) {
   int startPos = TOTAL_LED_COUNT - 1;
-  int endPos = params.moveRange;
+  int endPos = TOTAL_LED_COUNT - params.volume;
   
   // 条带逐步延长的逻辑
   for (int growLen = 1; growLen <= params.stripLen; growLen++) {
