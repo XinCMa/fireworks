@@ -9,7 +9,7 @@
 // 常量与引脚定义
 #define LED_PIN          7
 #define TOTAL_LED_COUNT  280
-#define PREVIEW_LED_COUNT 20
+#define PREVIEW_LED_COUNT 280
 
 #define SERVO_PIN       9
 
@@ -31,7 +31,7 @@
 #define JOYSTICK1_Y_PIN A1
 #define JOYSTICK2_X_PIN A2
 #define JOYSTICK2_Y_PIN A3 
-#define JOY_DEADZONE 120 
+#define JOY_DEADZONE 90
 
 #define MSG_SAVE_EFFECT    'S'
 #define MSG_PLAY_EFFECT    'P'
@@ -138,6 +138,11 @@ extern bool defaultSaveButtonState;
 extern bool defaultCustomizeButtonState;
 extern bool defaultExplodeButtonState;
 extern bool defaultGradientButtonState;
+
+extern uint8_t lastHueA;     // 记录最后的颜色 Hue 值
+extern uint8_t lastHueB;         // 记录最后的颜色 Hue 值
+extern bool inDeadzoneA;     // Joystick 是否在死区
+extern bool inDeadzoneB; // Joystick 是否在死区
 
 
 
