@@ -97,4 +97,6 @@ void drawGrowingGradientBar(int pos, const ExplosionParams &params, int growLen)
 
     leds[ledIndex] = gradColor;
   }
+fill_solid(leds, TOTAL_LED_COUNT, CRGB::Black);
+FastLED.show();
 } 
