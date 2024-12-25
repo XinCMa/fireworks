@@ -73,24 +73,36 @@ void playEffect(const FireworkEffect &effect) {
  **************************************************/
 // 上升
 void launchFirework(const FireworkEffect &effect) {
+  // 创建上升参数配置
+  AscendParams ascendCfg = {
+    effect.maxBrightness,  // maxBrightness
+    effect.speedDelay,     // speedDelay
+    30                     // stripLen
+  };
+
+  // 创建多段上升参数配置
+  BarsWithGapParams barsCfg = {
+    effect.maxBrightness,  // maxBrightness
+    effect.speedDelay,     // speedDelay
+    5,                     // segCount
+    10,                    // segLen
+    5                      // gapLen
+  };
+
   switch (effect.launchMode) {
     case NORMAL_ASCEND:
-      // (1)普通上升：白头亮，尾巴暗的条带，上升到顶部
-      // 实际上可用循环控制LED从下往上点亮
-      // 这里只留个伪代码
       Serial.println(">> Normal Ascend");
-      // TODO: 在这里根据 MAX_BRIGHTNESS、UP_STRIP_LENGTH = 30 等进行条带移动
+      normalAscendEffect(ascendCfg);
       break;
 
     case STEP_ASCEND:
-      // (2)断续上升：30个灯珠分成5小段
       Serial.println(">> Step Ascend");
-      // TODO: 同理留伪代码或函数
+      multipleShortBarsWithGapsAscend(barsCfg);
       break;
 
     case PENDULUM_ASCEND:
-      // (3)往复上升：每上升 50 个灯珠再向下 20 个，如此往复
       Serial.println(">> Pendulum Ascend");
+      pendulumAscend(ascendCfg);
       break;
   }
 
