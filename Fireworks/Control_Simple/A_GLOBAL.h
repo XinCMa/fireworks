@@ -6,23 +6,12 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 
-
 // 常量与引脚定义
 #define LED_PIN          7
 #define TOTAL_LED_COUNT  280
 #define PREVIEW_LED_COUNT 280
 
 #define SERVO_PIN       9
-
-#define DIR_PIN 36  // 方向引脚
-#define PUL_PIN 38  // 脉冲信号引脚
-#define ENA_PIN 40  // 使能引脚（可选）
-
-// 限位步数
-const int MAX_STEPS = 1600; // 最大步数（设定为 1 转，1.8° 步距电机 1/16 细分需要 3200 步）
-const int MIN_STEPS = 0;    // 最小步数（通常为 0）
-
-int currentStep = 0; // 当前步数记录
 
 #define ASCEND_BUTTON_PIN   2
 #define LASER_BUTTON_PIN 3

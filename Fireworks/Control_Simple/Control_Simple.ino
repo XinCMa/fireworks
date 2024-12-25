@@ -1,6 +1,5 @@
 #include <FastLED.h>
 #include <Servo.h>
-#include <Stepper.h>
 #include "A_GLOBAL.h"
 
 // 全局对象
@@ -26,16 +25,9 @@ void explosionSwitchBlink(const ExplosionParams &params);
 void launchFirework(const FireworkEffect &effect);
 void explodeFirework(const FireworkEffect &effect);
 void playEffect(const FireworkEffect &effect);
-void SetMirrorAngle(int angle);
 
 void setup() {
     Serial.begin(115200);
-    pinMode(DIR_PIN, OUTPUT); // 设置方向引脚为输出
-    pinMode(PUL_PIN, OUTPUT); // 设置脉冲引脚为输出
-    pinMode(ENA_PIN, OUTPUT); // 设置使能引脚为输出
-
-    digitalWrite(ENA_PIN, LOW);  // 启用驱动器
-    digitalWrite(DIR_PIN, HIGH); // 默认方向为正转
     
     // 初始化LED
     FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, TOTAL_LED_COUNT);
@@ -81,69 +73,8 @@ void handlePlayEffect() {
 }
 
 void playEffect(const FireworkEffect &effect) {
-    SetMirrorAngle(effect.mirrorAngle);
     launchFirework(effect);
     explodeFirework(effect);
-}
-
-void SetMirrorAngle(int angle) {
-    // 将角度转换为步数 (3200步对应180度)
-    int targetStep = map(angle, 0, 180, 0, MAX_STEPS);
-    
-    // 确定运动方向
-    if (targetStep > currentStep) {
-        digitalWrite(DIR_PIN, HIGH);  // 正向运动
-    } else {
-        digitalWrite(DIR_PIN, LOW);   // 反向运动
-    }
-
-    // 启动运动并检查限位
-    while (true) {
-        // 检查是否到达目标位置
-        if ((digitalRead(DIR_PIN) == HIGH && currentStep >= targetStep) ||
-            (digitalRead(DIR_PIN) == LOW && currentStep <= targetStep)) {
-            Serial.println("到达目标角度位置");
-            break;
-        }
-        
-        // 限位检查
-        if (digitalRead(DIR_PIN) == HIGH && currentStep >= MAX_STEPS) {
-            Serial.println("达到正向限位，停止电机！");
-            break;
-        }
-        if (digitalRead(DIR_PIN) == LOW && currentStep <= MIN_STEPS) {
-            Serial.println("达到反向限位，停止电机！");
-            break;
-        }
-
-        // 发送脉冲信号
-        digitalWrite(PUL_PIN, HIGH);
-        delayMicroseconds(500);
-        digitalWrite(PUL_PIN, LOW);
-        delayMicroseconds(500);
-
-        // 更新步数记录
-        if (digitalRead(DIR_PIN) == HIGH) {
-            currentStep++;
-        } else {
-            currentStep--;
-        }
-
-        // 检查停止命令
-        if (Serial.available() > 0) {
-            char stopInput = Serial.read();
-            if (stopInput == 's') {
-                Serial.println("用户输入停止命令");
-                break;
-            }
-        }
-    }
-
-    // 输出当前位置信息
-    Serial.print("当前步数: ");
-    Serial.println(currentStep);
-    Serial.print("当前角度: ");
-    Serial.println(map(currentStep, 0, MAX_STEPS, 0, 180));
 }
 
 void launchFirework(const FireworkEffect &effect) {
@@ -217,3 +148,5 @@ void clearSerialBuffer() {
         Serial.read();
     }
 }
+
+// 注意：需要包含 B_ASCEND_EFFECTS.ino 和 B_EXPLOSION_EFFECTS.ino 中的效果函数
