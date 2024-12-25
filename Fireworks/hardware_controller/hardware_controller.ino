@@ -54,6 +54,41 @@ void loop() {
         if (cmdType == MSG_PLAY_EFFECT) {
             handlePlayEffect();
         }
+        else if (cmdType == 'U' || cmdType == 'D') {
+            // 读取后续的数字
+            String stepStr = "";
+            while (Serial.available() > 0) {
+                char c = Serial.read();
+                if (isDigit(c)) {
+                    stepStr += c;
+                }
+            }
+            
+            int steps = stepStr.toInt();
+            if (steps > 0) {
+                // 设置方向
+                digitalWrite(DIR_PIN, cmdType == 'U' ? HIGH : LOW);
+                
+                // 执行步进
+                for (int i = 0; i < steps && 
+                    ((cmdType == 'U' && currentStep < MAX_STEPS) ||
+                     (cmdType == 'D' && currentStep > MIN_STEPS)); i++) {
+                    digitalWrite(PUL_PIN, HIGH);
+                    delayMicroseconds(500);
+                    digitalWrite(PUL_PIN, LOW);
+                    delayMicroseconds(500);
+                    
+                    // 更新当前步数
+                    currentStep += (cmdType == 'U' ? 1 : -1);
+                }
+                
+                // 输出当前位置信息
+                Serial.print("当前步数: ");
+                Serial.println(currentStep);
+                Serial.print("当前角度: ");
+                Serial.println(map(currentStep, 0, MAX_STEPS, 0, 180));
+            }
+        }
     }
 }
 
@@ -79,7 +114,6 @@ void handlePlayEffect() {
     // 执行效果
     playEffect(currentEffect);
 }
-
 void playEffect(const FireworkEffect &effect) {
     SetMirrorAngle(effect.mirrorAngle);
     launchFirework(effect);

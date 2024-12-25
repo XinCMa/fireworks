@@ -19,7 +19,7 @@
 #define ENA_PIN 40  // 使能引脚（可选）
 
 // 限位步数
-const int MAX_STEPS = 1600; // 最大步数（设定为 1 转，1.8° 步距电机 1/16 细分需要 3200 步）
+const int MAX_STEPS = 6400; // 最大步数（设定为 1 转，1.8° 步距电机 1/16 细分需要 3200 步）
 const int MIN_STEPS = 0;    // 最小步数（通常为 0）
 
 int currentStep = 0; // 当前步数记录
